@@ -1,0 +1,69 @@
+* imdb
+
+** Introduction
+imdb is a simple library intended to simplify the utilization of IMDB information within go programming scripts. This is an initial, simple version of the package, which will be continually updated and expanded in the coming months.
+
+** Full API docs
+The full API docs can be viewed using go's built in documentation tool, or online at [[http://godoc.org/github.com/shiggins8/go-imdb][godoc.org]].
+
+** Basic Usage
+*** Setting up the API Key
+A crucial thing to note is that the environment variable OMDB_API_KEY must be set to a valid key before using this package. 
+
+The Open Movie Database provides a free API key. However, as it is limited to 1000 daily uses, a centralized key could not be provided for this package. A free API key can be obtained [[http://www.omdbapi.com/apikey.aspx][here]].
+
+Use the preceding link to obtain a key, then run:
+
+```bash
+export OMDB_API_KEY=xxxxxxxx
+```
+
+Additionally, a helper method in the package has been included: SetOmdbAPIKey(key string). This can be called from your code
+as follows to manipulate the environment variable and not have to worry about setting it in your environment:
+
+```bash
+imdb.SetOmdbAPIKey("xxxxxxxx")
+```
+
+*** Querying a Movie
+The following script shows how a user can utilize the package to get information about a movie:
+
+#+BEGIN_SRC go
+
+package main
+
+import (
+	"fmt"
+    "log"
+
+	"github.com/shiggins8/go-imdb"
+)
+
+func main() {
+    imdb.SetOmdbAPIKey("your-key-here")
+
+	result, err := imdb.FetchMovie("Toy Story")
+
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println(result.GetBasicInfo())
+	
+}
+
+#+END_SRC
+
+** Contributing
+
+Like I said above, this is definitely a work in progress. I'm more than happy to review pull requests. I'll address each pull request or issue as quickly as I can.
+
+If you'd like to propose a change please ensure the following:
+
+- All existing tests are passing.
+- There are tests in the test suite that cover the changes you're making.
+- You have added documentation strings (in English) to (at least) the public functions you've added or modified.
+
+Thanks! 
+
+- Code created by Scott Higgins
