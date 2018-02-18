@@ -14,16 +14,20 @@ The Open Movie Database provides a free API key. However, as it is limited to 10
 
 Use the preceding link to obtain a key, then run:
 
-```bash
+#+BEGIN_SRC bash
+
 export OMDB_API_KEY=xxxxxxxx
-```
+
+#+END_SRC
 
 Additionally, a helper method in the package has been included: SetOmdbAPIKey(key string). This can be called from your code
 as follows to manipulate the environment variable and not have to worry about setting it in your environment:
 
-```bash
+#+BEGIN_SRC go
+
 imdb.SetOmdbAPIKey("xxxxxxxx")
-```
+
+#+END_SRC
 
 *** Querying a Movie
 The following script shows how a user can utilize the package to get information about a movie:
