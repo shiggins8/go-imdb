@@ -7,7 +7,6 @@ package imdb
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -48,7 +47,7 @@ var APIKey = os.Getenv("OMDB_API_KEY")
 
 // OmdbURL contains the base URL for the API, formatted with two potential strings
 // that will be included for requests: the API key and the title of the movie
-const OmdbURL = "http://www.omdbapi.com/?apikey=%s&t=%s"
+var OmdbURL = "http://www.omdbapi.com/?apikey=%s&t=%s"
 
 // SetOmdbAPIKey can be used to set the API key environment variable from within the go script, so that the
 // user does not have to worry about manually setting the variable themselves before running the script.
@@ -58,7 +57,7 @@ func SetOmdbAPIKey(key string) {
 }
 
 // FetchMovie takes 1 parameter (string, the name of the movie). Then it will
-// query the OMDB API, Unmarshal the response data into a Movie struct, and
+// query the OMDB API, decode the response data into a Movie struct, and
 // then return a pointer of that struct
 func FetchMovie(title string) (*Movie, error) {
 	err := checkValidAPIKey()
@@ -69,15 +68,12 @@ func FetchMovie(title string) (*Movie, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	result := Movie{}
 
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
+	err = json.NewDecoder(response.Body).Decode(&result)
 
-	err = json.Unmarshal([]byte(data), &result)
 	if err != nil {
 		return nil, err
 	}
